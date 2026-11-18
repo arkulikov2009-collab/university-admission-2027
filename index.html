@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f7fb">
+  <meta name="description" content="Персональный навигатор абитуриента — 2027 по 11 вузам Москвы.">
+  <title>Поступление — 2027 · Мой навигатор</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f7fb;
+      --paper: #fff;
+      --ink: #171923;
+      --muted: #737887;
+      --line: #e8eaf0;
+      --accent: #5546e8;
+      --accent-dark: #4033c4;
+      --accent-soft: #efedff;
+      --green: #16794b;
+      --green-soft: #e7f6ee;
+      --amber: #946200;
+      --amber-soft: #fff4d8;
+      --shadow: 0 14px 40px rgba(27, 31, 59, .07);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--ink); min-width: 320px; }
+    button, input, select, textarea { font: inherit; }
+    button { cursor: pointer; }
+    .shell { max-width: 1240px; margin: 0 auto; padding: 34px 28px 64px; }
+    .topline { display:flex; justify-content:space-between; align-items:center; gap:16px; margin-bottom:44px; }
+    .brand { display:flex; align-items:center; gap:10px; font-size:14px; font-weight:750; letter-spacing:-.02em; }
+    .brand-mark { display:grid; place-items:center; width:34px; height:34px; color:#fff; background:var(--accent); border-radius:11px; font-size:16px; }
+    .year-pill { border:1px solid var(--line); background:var(--paper); color:var(--muted); border-radius:999px; padding:8px 13px; font-size:12px; font-weight:700; }
+    .hero { display:grid; grid-template-columns:minmax(0, 1fr) 278px; align-items:end; gap:40px; margin-bottom:30px; }
+    .eyebrow { color:var(--accent); font-weight:800; font-size:12px; text-transform:uppercase; letter-spacing:.12em; margin:0 0 13px; }
+    h1 { margin:0; max-width:790px; font-size:clamp(36px, 5vw, 58px); line-height:1.04; letter-spacing:-.055em; }
+    h1 span { color:var(--accent); }
+    .intro { max-width:650px; color:var(--muted); font-size:15px; line-height:1.65; margin:17px 0 0; }
+    .summary { border:1px solid var(--line); background:var(--paper); border-radius:18px; padding:18px 20px; box-shadow:0 4px 18px rgba(27,31,59,.03); }
+    .summary-num { font-size:32px; font-weight:800; letter-spacing:-.06em; }
+    .summary-label { color:var(--muted); font-size:12px; margin-top:3px; }
+    .summary-note { margin-top:14px; padding-top:13px; border-top:1px solid var(--line); color:var(--muted); font-size:11px; line-height:1.5; }
+    .toolbar { display:flex; align-items:center; gap:10px; padding:12px; border:1px solid var(--line); background:var(--paper); border-radius:16px; margin:28px 0 22px; box-shadow:0 5px 20px rgba(27,31,59,.025); }
+    .search-wrap { position:relative; flex:1; min-width:180px; }
+    .search-icon { position:absolute; left:14px; top:50%; transform:translateY(-50%); color:#9398a7; pointer-events:none; }
+    .search { width:100%; height:44px; border:1px solid transparent; border-radius:11px; outline:none; padding:0 14px 0 42px; background:#f7f8fb; color:var(--ink); }
+    .search:focus, select:focus { border-color:#bab4ff; box-shadow:0 0 0 3px rgba(85,70,232,.1); }
+    select { height:44px; min-width:190px; padding:0 36px 0 13px; border:1px solid var(--line); border-radius:11px; background:#fff; color:#343746; outline:none; }
+    .result-count { white-space:nowrap; padding:0 7px; color:var(--muted); font-size:12px; }
+    .content-layout { display:grid; grid-template-columns:minmax(0, 1fr) 278px; gap:25px; align-items:start; }
+    .section-heading { display:flex; align-items:baseline; justify-content:space-between; gap:15px; margin:7px 2px 15px; }
+    h2 { font-size:18px; letter-spacing:-.03em; margin:0; }
+    .section-hint { color:var(--muted); font-size:12px; }
+    .university-grid { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:14px; }
+    .university-card { text-align:left; color:inherit; border:1px solid var(--line); border-radius:17px; padding:17px; min-height:176px; background:var(--paper); box-shadow:0 4px 14px rgba(27,31,59,.025); transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease; }
+    .university-card:hover { transform:translateY(-3px); border-color:#d3d0ff; box-shadow:var(--shadow); }
+    .card-top { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }
+    .crest { display:grid; place-items:center; width:46px; height:46px; border-radius:14px; color:var(--accent); background:var(--accent-soft); font-size:22px; }
+    .vuc-badge { display:inline-flex; align-items:center; gap:5px; background:var(--green-soft); color:var(--green); border-radius:999px; padding:6px 9px; font-size:10px; line-height:1; font-weight:800; white-space:nowrap; }
+    .vuc-dot { width:5px; height:5px; background:currentColor; border-radius:50%; }
+    .card-title { display:block; margin-top:24px; font-size:15px; font-weight:750; line-height:1.35; letter-spacing:-.025em; }
+    .card-open { display:block; margin-top:8px; color:var(--muted); font-size:11px; }
+    .no-results { padding:38px 20px; text-align:center; color:var(--muted); background:var(--paper); border:1px dashed var(--line); border-radius:16px; grid-column:1/-1; }
+    .journal { border:1px solid var(--line); border-radius:17px; padding:19px; background:var(--paper); }
+    .journal-header { display:flex; justify-content:space-between; align-items:center; gap:10px; }
+    .journal-label { font-size:14px; font-weight:780; }
+    .journal-icon { width:30px; height:30px; display:grid; place-items:center; background:#f3f1ff; color:var(--accent); border-radius:10px; }
+    .updated { color:var(--muted); font-size:11px; margin:14px 0 17px; }
+    .journal-list { list-style:none; padding:0; margin:0; }
+    .journal-item { position:relative; padding:0 0 16px 16px; border-left:1px solid #e4e1ff; color:#555967; font-size:12px; line-height:1.5; }
+    .journal-item:last-child { padding-bottom:0; border-left-color:transparent; }
+    .journal-item:before { content:""; position:absolute; left:-4px; top:4px; width:7px; height:7px; border-radius:50%; background:var(--accent); box-shadow:0 0 0 3px #f0efff; }
+    .journal-date { display:block; color:#9699a5; font-size:10px; margin-bottom:3px; }
+    .journal-foot { border-top:1px solid var(--line); margin-top:17px; padding-top:13px; color:var(--muted); font-size:10px; line-height:1.5; }
+    .footer { margin-top:28px; color:#9296a2; font-size:11px; line-height:1.6; }
+    .modal-backdrop { position:fixed; inset:0; display:none; align-items:center; justify-content:center; padding:20px; background:rgba(20,22,35,.48); backdrop-filter:blur(5px); z-index:10; }
+    .modal-backdrop.open { display:flex; animation:fade-in .18s ease; }
+    @keyframes fade-in { from {opacity:0} to {opacity:1} }
+    .modal { width:min(820px, 100%); max-height:min(90vh, 900px); overflow:auto; background:var(--paper); border-radius:22px; box-shadow:0 25px 90px rgba(11,14,32,.25); animation:rise-in .2s ease; }
+    @keyframes rise-in { from {opacity:0; transform:translateY(10px)} to {opacity:1; transform:translateY(0)} }
+    .modal-head { position:sticky; top:0; z-index:2; display:flex; justify-content:space-between; align-items:flex-start; gap:20px; padding:23px 26px; border-bottom:1px solid var(--line); background:rgba(255,255,255,.96); backdrop-filter:blur(8px); }
+    .modal-title-wrap { display:flex; align-items:center; gap:14px; }
+    .modal-title-wrap .crest { flex:0 0 auto; }
+    .modal h2 { font-size:22px; line-height:1.25; }
+    .modal-subtitle { margin-top:5px; color:var(--muted); font-size:12px; }
+    .close-button { border:0; width:36px; height:36px; border-radius:11px; background:#f3f4f8; color:#6d7180; font-size:21px; line-height:1; }
+    .close-button:hover { background:#e9eaf0; color:var(--ink); }
+    .modal-body { padding:22px 26px 26px; }
+    .notice { margin:0 0 18px; padding:12px 14px; border-radius:12px; background:var(--amber-soft); color:var(--amber); font-size:12px; line-height:1.55; }
+    .detail-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    .detail-card { border:1px solid var(--line); border-radius:14px; padding:16px; min-width:0; }
+    .detail-card.full { grid-column:1/-1; }
+    .detail-title { margin:0 0 10px; font-size:12px; font-weight:800; letter-spacing:.01em; }
+    .detail-content { color:#5f6371; font-size:12px; line-height:1.65; }
+    .detail-content p { margin:5px 0; }
+    .detail-content strong { color:#292c38; font-weight:700; }
+    .muted-value { color:#9296a2; font-style:italic; }
+    .route-image { display:block; width:100%; max-height:250px; object-fit:contain; border:1px solid var(--line); border-radius:10px; background:#fafaff; margin-top:10px; }
+    .route-placeholder { padding:19px; margin-top:10px; border:1px dashed #d8d5fa; border-radius:10px; text-align:center; color:var(--muted); background:#fafaff; font-size:11px; }
+    .official-link { display:inline-flex; align-items:center; gap:6px; color:var(--accent); font-weight:750; text-decoration:none; }
+    .official-link:hover { text-decoration:underline; }
+    .notes { display:block; width:100%; min-height:92px; resize:vertical; border:1px solid var(--line); border-radius:10px; padding:10px; color:var(--ink); background:#fcfcfe; outline:none; font-size:12px; line-height:1.5; }
+    .notes:focus { border-color:#bab4ff; box-shadow:0 0 0 3px rgba(85,70,232,.08); }
+    .save-hint { color:var(--muted); font-size:10px; margin-top:6px; }
+    @media (max-width: 960px) { .hero, .content-layout { grid-template-columns:minmax(0, 1fr) 245px; gap:18px; } .university-grid { grid-template-columns:repeat(2, minmax(0,1fr)); } select { min-width:165px; } }
+    @media (max-width: 700px) { .shell { padding:22px 16px 42px; } .topline { margin-bottom:34px; } .hero { grid-template-columns:1fr; gap:20px; } .summary { display:flex; justify-content:space-between; align-items:center; gap:15px; } .summary-note { max-width:240px; border:0; border-left:1px solid var(--line); padding:0 0 0 14px; margin:0; } .content-layout { grid-template-columns:1fr; } .journal { grid-row:1; } .toolbar { flex-wrap:wrap; } .search-wrap { flex-basis:100%; } select { flex:1; min-width:0; } .section-heading { align-items:flex-start; flex-direction:column; gap:5px; } }
+    @media (max-width: 480px) { .shell { padding-left:13px; padding-right:13px; } .university-grid { gap:9px; } .university-card { min-height:155px; padding:13px; border-radius:14px; } .crest { width:40px; height:40px; font-size:19px; border-radius:12px; } .vuc-badge { font-size:9px; padding:6px 7px; } .card-title { margin-top:18px; font-size:13px; } .card-open { font-size:10px; } .modal-backdrop { padding:9px; align-items:flex-end; } .modal { max-height:94vh; border-radius:19px 19px 12px 12px; } .modal-head { padding:17px; } .modal-body { padding:16px 17px 20px; } .detail-grid { grid-template-columns:1fr; } .detail-card.full { grid-column:auto; } .modal h2 { font-size:17px; } .modal-title-wrap { gap:10px; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior:auto !important; animation-duration:.01ms !important; transition-duration:.01ms !important; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topline">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">↗</span><span>МОЙ НАВИГАТОР</span></div>
+      <span class="year-pill">Приёмная кампания · 2027</span>
+    </header>
+
+    <section class="hero" aria-labelledby="page-title">
+      <div>
+        <p class="eyebrow">Планируй поступление уверенно</p>
+        <h1 id="page-title">Поступление — 2027.<br><span>Мой навигатор</span> по 11 вузам</h1>
+        <p class="intro">Сравнивай университеты, сохраняй заметки и собирай всё важное о поступлении в одном месте.</p>
+      </div>
+      <aside class="summary" aria-label="Количество вузов">
+        <div><div class="summary-num">11</div><div class="summary-label">вузов Москвы в подборке</div></div>
+        <div class="summary-note">Данные о баллах, стоимости и датах нужно сверять с официальными источниками.</div>
+      </aside>
+    </section>
+
+    <section class="toolbar" aria-label="Поиск и фильтры">
+      <label class="search-wrap">
+        <span class="search-icon" aria-hidden="true">⌕</span>
+        <input id="search" class="search" type="search" placeholder="Найти университет…" autocomplete="off" aria-label="Найти университет">
+      </label>
+      <select id="direction-filter" aria-label="Фильтр по направлению">
+        <option value="">Все направления</option>
+        <option value="Экономика">Экономика</option>
+        <option value="Менеджмент">Менеджмент</option>
+        <option value="Бизнес-информатика">Бизнес-информатика</option>
+      </select>
+      <select id="price-filter" aria-label="Фильтр по стоимости">
+        <option value="">Любая стоимость</option>
+        <option value="350000">До 350 000 ₽ в год</option>
+      </select>
+      <span class="result-count" id="result-count" aria-live="polite"></span>
+    </section>
+
+    <div class="content-layout">
+      <section aria-labelledby="list-title">
+        <div class="section-heading"><h2 id="list-title">Университеты</h2><span class="section-hint">Нажми на карточку, чтобы открыть подробности</span></div>
+        <div class="university-grid" id="university-grid"></div>
+      </section>
+      <aside class="journal" aria-labelledby="journal-title">
+        <div class="journal-header"><span class="journal-label" id="journal-title">Журнал изменений</span><span class="journal-icon" aria-hidden="true">◷</span></div>
+        <p class="updated">Последнее обновление: <strong id="journal-updated"></strong></p>
+        <ul class="journal-list" id="journal-list"></ul>
+        <div class="journal-foot">Записи редактируются в массиве <code>CHANGELOG</code> внизу файла.</div>
+      </aside>
+    </div>
+    <footer class="footer">Персональный справочник для планирования. Условия приёма, стоимость и наличие программ могут меняться — проверяй сведения на официальных сайтах вузов.</footer>
+  </main>
+
+  <div class="modal-backdrop" id="modal-backdrop" role="presentation">
+    <section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <header class="modal-head">
+        <div class="modal-title-wrap"><div class="crest" id="modal-crest" aria-hidden="true"></div><div><h2 id="modal-title"></h2><div class="modal-subtitle">Поступление · 2027</div></div></div>
+        <button class="close-button" id="modal-close" type="button" aria-label="Закрыть окно">×</button>
+      </header>
+      <div class="modal-body" id="modal-body"></div>
+    </section>
+  </div>
+
+  <script>
+    // Редактируйте значения ниже. Неуказанные сведения намеренно оставлены пустыми, чтобы не выдавать неподтверждённые цифры за официальные.
+    const UNIVERSITIES = [
+      { id:'fa', name:'Финансовый университет', short:'ФУ', directions:['Экономика','Менеджмент','Бизнес-информатика'], officialUrl:'https://www.fa.ru/', address:'', tuition:null, budgetPlaces:null, paidPlaces:null, scores2025:null, scores2026:null, vuc:'Наличие и категории уточнить на официальном сайте', openDays:[], checkedAt:'', travel:'', transfers:'', metro:'', walk:'', routeImage:'route_finuniversity.png' },
+      { id:'tim', name:'РГАУ-МСХА им. К. А. Тимирязева', short:'Т', directions:['Экономика','Менеджмент'], officialUrl:'https://www.timacad.ru/', address:'', tuition:null, budgetPlaces:null, paidPlaces:null, scores2025:null, scores2026:null, vuc:'Наличие и категории уточнить на официальном сайте', openDays:[], checkedAt:'', travel:'', transfers:'', metro:'', walk:'', routeImage:'route_timacad.png' },
+      { id:'reu', name:'РЭУ им. Г. В. Плеханова', short:'РЭ', directions:['Экономика','Менеджмент','Бизнес-информатика'], officialUrl:'https://www.rea.ru/', address:'', tuition:null, budgetPlaces:null, paidPlaces:null, scores2025:null, scores2026:null, vuc:'Наличие и категории уточнить на официальном сайте', openDays:[], checkedAt:'', travel:'', transfers:'', metro:'', walk:'', routeImage:'route_rea.png' },
+      { id:'mpei', name:'НИУ «МЭИ»', short:'МЭИ', directions:['Экономика','Менеджмент'], officialUrl:'https://mpei.ru/', address:'', tuition:null, budgetPlaces:null, paidPlaces:null, scores2025:null, scores2026:null, vuc:'Наличие и категории уточнить на официальном сайте', openDays:[], checkedAt:'', travel:'', transfers:'', metro:'', walk:'', routeImage:'route_mpei.png' },
+      { id:'hse', name:'НИУ «Высшая школа экономики» (Москва)', short:'ВШЭ', directions:['Экономика','Менеджмент','Бизнес-информатика'], officialUrl:'https://www.hse.ru/admissions/', address:'', tuition:null, budgetPlaces:null, paidPlaces:null, scores2025:null, scores2026:null, vuc:'Наличие и категории уточнить на официальном сайте', openDays:[], checkedAt:'', travel:'', transfers:'', metro:'', walk:'', routeImage:'route_hse.png' },
+      { id:'mgsu', name:'НИУ МГСУ', short:'МГСУ', directions:['Экономика','Менеджмент'], officialUrl:'https://mgsu.ru/', address:'', tuition:null, budgetPlaces:null, paidPlaces:null, scores2025:null, scores2026:null, vuc:'Наличие и категории уточнить на официальном сайте', openDays:[], checkedAt:'', travel:'', transfers:'', metro:'', walk:'', routeImage:'route_mgsu.png' },
+      { id:'guz', name:'Государственный университет по землеустройству (ГУЗ)', short:'ГУЗ', directions:['Экономика','Менеджмент'], officialUrl:'https://www.guz.ru/', address:'', tuition:null, budgetPlaces:null, paidPlaces:null, scores2025:null, scores2026:null, vuc:'Наличие и категории уточнить на официальном сайте', openDays:[], checkedAt:'', travel:'', transfers:'', metro:'', walk:'', routeImage:'route_guz.png' },
+      { id:'mai', name:'��осковский авиационный институт (МАИ)', short:'МАИ', directions:['Экономика','Менеджмент','Бизнес-информатика'], officialUrl:'https://mai.ru/', address:'', tuition:null, budgetPlaces:null, paidPlaces:null, scores2025:null, scores2026:null, vuc:'Наличие и категории уточнить на официальном сайте', openDays:[], checkedAt:'', travel:'', transfers:'', metro:'', walk:'', routeImage:'route_mai.png' },
+      { id:'ranepa', name:'РАНХиГС (Москва)', short:'РАНХиГС', directions:['Экономика','Менеджмент','Бизнес-информатика'], officialUrl:'https://www.ranepa.ru/', address:'', tuition:null, budgetPlaces:null, paidPlaces:null, scores2025:null, scores2026:null, vuc:'Наличие и категории уточнить на официальном сайте', openDays:[], checkedAt:'', travel:'', transfers:'', metro:'', walk:'', routeImage:'route_ranepa.png' },
+      { id:'bmstu', name:'МГТУ им. Н. Э. Баумана', short:'БМ', directions:['Экономика','Менеджмент','Бизнес-информатика'], officialUrl:'https://bmstu.ru/', address:'', tuition:null, budgetPlaces:null, paidPlaces:null, scores2025:null, scores2026:null, vuc:'Наличие и категории уточнить на официальном сайте', openDays:[], checkedAt:'', travel:'', transfers:'', metro:'', walk:'', routeImage:'route_bmstu.png' },
+      { id:'gubkin', name:'РГУ нефти и газа им. И. М. Губкина', short:'Г', directions:['Экономика','Менеджмент'], officialUrl:'https://www.gubkin.ru/', address:'', tuition:null, budgetPlaces:null, paidPlaces:null, scores2025:null, scores2026:null, vuc:'Наличие и категории уточнить на официальном сайте', openDays:[], checkedAt:'', travel:'', transfers:'', metro:'', walk:'', routeImage:'route_gubkin.png' }
+    ];
+
+    // Добавляйте новые записи в начало массива, чтобы они отображались первыми.
+    const CHANGELOG = [
+      { date:'18.11.2026', text:'Создан справочник вузов и добавлены карточки для первичного заполнения.' },
+      { date:'18.11.2026', text:'Добавлены поиск, фильтры и личные заметки по каждому вузу.' }
+    ];
+    const LAST_UPDATED = '18.11.2026';
+    const grid = document.getElementById('university-grid');
+    const searchInput = document.getElementById('search');
+    const directionFilter = document.getElementById('direction-filter');
+    const priceFilter = document.getElementById('price-filter');
+    const backdrop = document.getElementById('modal-backdrop');
+    let lastFocusedElement = null;
+
+    function escapeHtml(value) {
+      return String(value ?? '').replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+    }
+    function display(value, suffix='') {
+      return value === null || value === undefined || value === '' ? '<span class="muted-value">Уточнить</span>' : `${escapeHtml(value)}${suffix}`;
+    }
+    function renderCards() {
+      const query = searchInput.value.trim().toLocaleLowerCase('ru');
+      const direction = directionFilter.value;
+      const maxPrice = Number(priceFilter.value) || null;
+      const filtered = UNIVERSITIES.filter(uni => {
+        const matchesSearch = uni.name.toLocaleLowerCase('ru').includes(query);
+        const matchesDirection = !direction || uni.directions.includes(direction);
+        const matchesPrice = !maxPrice || (typeof uni.tuition === 'number' && uni.tuition <= maxPrice);
+        return matchesSearch && matchesDirection && matchesPrice;
+      });
+      document.getElementById('result-count').textContent = `${filtered.length} из ${UNIVERSITIES.length}`;
+      grid.innerHTML = filtered.length ? filtered.map(uni => `
+        <button class="university-card" type="button" data-id="${escapeHtml(uni.id)}" aria-label="Открыть информацию: ${escapeHtml(uni.name)}">
+          <span class="card-top"><span class="crest" aria-hidden="true">${escapeHtml(uni.short)}</span><span class="vuc-badge"><span class="vuc-dot"></span>ВУЦ: Есть</span></span>
+          <span class="card-title">${escapeHtml(uni.name)}</span><span class="card-open">Открыть информацию&nbsp; ↗</span>
+        </button>`).join('') : '<div class="no-results">Ничего не найдено. Попробуй изменить запрос или фильтры.</div>';
+      grid.querySelectorAll('.university-card').forEach(button => button.addEventListener('click', () => openUniversity(button.dataset.id, button)));
+    }
+    function detailCard(title, content, full=false) {
+      return `<section class="detail-card${full?' full':''}"><h3 class="detail-title">${title}</h3><div class="detail-content">${content}</div></section>`;
+    }
+    function openUniversity(id, trigger) {
+      const uni = UNIVERSITIES.find(item => item.id === id);
+      if (!uni) return;
+      lastFocusedElement = trigger;
+      document.getElementById('modal-crest').textContent = uni.short;
+      document.getElementById('modal-title').textContent = uni.name;
+      const directions = uni.directions.map(escapeHtml).join(', ') || '<span class="muted-value">Уточнить</span>';
+      const ege = 'Предварительный ориентир: математика + русский язык + обществознание. Состав ЕГЭ и минимальные баллы проверь в правилах приёма выбранного направления.';
+      const openDays = uni.openDays.length ? uni.openDays.map(escapeHtml).join('<br>') : '<span class="muted-value">Добавьте подтверждённые даты</span>';
+      const address = uni.address ? escapeHtml(uni.address) : '<span class="muted-value">Добавьте адрес главного корпуса</span>';
+      const routeFile = uni.routeImage ? escapeHtml(uni.routeImage) : '';
+      const checked = uni.checkedAt ? escapeHtml(uni.checkedAt) : '<span class="muted-value">Не указана — заполните после проверки</span>';
+      const routeMarkup = routeFile ? `<img class="route-image" src="${routeFile}" alt="Схема маршрута от станции Болшево до ${escapeHtml(uni.name)}" onerror="this.hidden=true; this.nextElementSibling.hidden=false"><div class="route-placeholder" hidden>Добавьте изображение <code>${routeFile}</code> рядом с index.html.</div>` : '<div class="route-placeholder">Добавьте имя файла схемы маршрута в поле <code>routeImage</code> объекта этого вуза.</div>';
+      document.getElementById('modal-body').innerHTML = `
+        <p class="notice">Это редактируемый шаблон: баллы, количество мест, стоимость, даты и ВУЦ пока не подтверждены. Заполните данные по официальным источникам перед использованием.</p>
+        <div class="detail-grid">
+          ${detailCard('Направления и ЕГЭ', `<p><strong>Направления:</strong> ${directions}</p><p><strong>Предметы ЕГЭ:</strong> ${ege}</p>`)}
+          ${detailCard('Места и проходные баллы', `<p><strong>Бюджетные места:</strong> ${display(uni.budgetPlaces)}</p><p><strong>Платные места:</strong> ${display(uni.paidPlaces)}</p><p><strong>Проходной балл, 2025:</strong> ${display(uni.scores2025)}</p><p><strong>Проходной балл, 2026:</strong> ${display(uni.scores2026)}</p>`)}
+          ${detailCard('Стоимость обучения', `<p><strong>За год:</strong> ${display(uni.tuition, ' ₽')}</p><p><strong>Бюджет 300–350 тыс. ₽:</strong> ${typeof uni.tuition === 'number' ? (uni.tuition <= 350000 ? '<span style="color:var(--green);font-weight:750">Укладывается</span>' : '<span style="color:#b43b36;font-weight:750">Выше лимита</span>') : '<span class="muted-value">Сравнение после заполнения цены</span>'}</p>`)}
+          ${detailCard('Военный учебный центр', `<p><strong>Статус:</strong> ${display(uni.vuc)}</p><label for="notes-${escapeHtml(uni.id)}"><strong>Мои заметки</strong></label><textarea class="notes" id="notes-${escapeHtml(uni.id)}" placeholder="Сохраняются в этом браузере…"></textarea><div class="save-hint">Заметки хранятся локально на этом устройстве.</div>`)}
+          ${detailCard('Дни открытых дверей', `<p>${openDays}</p>`)}
+          ${detailCard('Логистика от ст. Болшево', `<p><strong>Адрес корпуса:</strong> ${address}</p><p><strong>Время в пути:</strong> ${display(uni.travel)}</p><p><strong>Пересадки:</strong> ${display(uni.transfers)}</p><p><strong>Метро / пешком:</strong> ${display(uni.metro)} / ${display(uni.walk)}</p>${routeMarkup}`, true)}
+          ${detailCard('Официальный источник и актуальность', `<p><a class="official-link" href="${escapeHtml(uni.officialUrl)}" target="_blank" rel="noopener noreferrer">Официальный сайт ↗</a></p><p><strong>Дата последней проверки:</strong> ${checked}</p>`, true)}
+        </div>`;
+      const notes = document.getElementById(`notes-${uni.id}`);
+      try { notes.value = localStorage.getItem(`admission-notes-${uni.id}`) || ''; } catch (_) { /* Локальное хранилище может быть отключено браузером. */ }
+      notes.addEventListener('input', () => { try { localStorage.setItem(`admission-notes-${uni.id}`, notes.value); } catch (_) { /* Без localStorage заметка останется до закрытия окна. */ } });
+      backdrop.classList.add('open');
+      document.body.style.overflow = 'hidden';
+      document.getElementById('modal-close').focus();
+    }
+    function closeModal() {
+      backdrop.classList.remove('open');
+      document.body.style.overflow = '';
+      if (lastFocusedElement) lastFocusedElement.focus();
+    }
+    searchInput.addEventListener('input', renderCards);
+    directionFilter.addEventListener('change', renderCards);
+    priceFilter.addEventListener('change', renderCards);
+    document.getElementById('modal-close').addEventListener('click', closeModal);
+    backdrop.addEventListener('click', event => { if (event.target === backdrop) closeModal(); });
+    document.addEventListener('keydown', event => { if (event.key === 'Escape' && backdrop.classList.contains('open')) closeModal(); });
+    document.getElementById('journal-updated').textContent = LAST_UPDATED;
+    document.getElementById('journal-list').innerHTML = CHANGELOG.map(entry => `<li class="journal-item"><span class="journal-date">${escapeHtml(entry.date)}</span>${escapeHtml(entry.text)}</li>`).join('');
+    renderCards();
+  </script>
+</body>
+</html>
